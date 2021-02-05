@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimal Django File Upload Example</title>
+    </head>
+
+    <body>
+        <!-- List of uploaded documents -->
+        {% if gpx_files %}
+            All documents in the database:
+            <ul>
+                {% for gpx_file in gpx_files %}
+                    <li><a href="{{ document.gpx_file.url }}">{{ gpx_file.gpx_file.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Gpx file.</p>
+        {% endif %}
+
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url "reporter:upload-gpx" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ message }}
+            <p>{{ form.non_field_errors }}</p>
+
+            <p>{{ form.gpx_file.label_tag }} {{ form.gpx_file.help_text }}</p>
+
+            <p>
+                {{ form.gpx_file.errors }}
+                {{ form.gpx_file }}
+            </p>
+
+            <p><input type="submit" value="Upload"/></p>
+        </form>
+    </body>
+</html>
