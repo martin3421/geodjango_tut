@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
               'ENGINE': 'django.contrib.gis.db.backends.postgis',
               'NAME': 'geodjango_tut',
-              'USER': 'martin',
-              'PASSWORD': 'martin',
+              'USER': 'hema0004',
+              'PASSWORD': 'hema0004',
               'HOST': '127.0.0.1',
               'PORT': 5432,
 

@@ -1,4 +1,5 @@
 import os
+import xml.etree.ElementTree as ET
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from .models import WorldBorder, Incidence
@@ -33,7 +34,7 @@ def upload_gpx(request):
         form = UploadGpxForm(request.POST, request.FILES)
         if form.is_valid():
             new_file = gpxFile(gpx_file=request.FILES['gpx_file'])
-            new_file.save()
+            #new_file.save()
             SaveGPXtoPostGIS(request.FILES['gpx_file'], new_file)
 
             # Redirect to the document list after POST
@@ -53,18 +54,19 @@ def upload_gpx(request):
 def SaveGPXtoPostGIS(file_data, file_instance):
     file_path = os.path.join(MEDIA_ROOT,'gpx_files', file_data.name)
     with open(file_path) as gpxfile:
-        gpx = gpxpy.parse(gpxfile)
-        if gpx.waypoints:        
-            for waypoint in gpx.waypoints: 
-                print(waypoint.name)
-        if gpx.tracks:
-            for track in gpx.tracks:
-                for extension in track.extensions:
-                    print(extension.name)
+        # gpx = gpxpy.parse(gpxfile)
+        # if gpx.waypoints:        
+        #     for waypoint in gpx.waypoints: 
+        #         print(waypoint.name)
+        # if gpx.tracks:
+        #     for track in gpx.tracks:
+        #         for extension in track.extensions:
+        #             print(extension.name)
                 # #print(track)
                 # for segment in track.segments:
                 # #    print(segment)
                 #     for point in segment.points:
                 #         print(point)
-    #gpx_file = open(settings.MEDIA_ROOT+ '/uploaded_gpx_files'+'/' + f.name)
-    #gpx = gpxpy.parse(gpx_file)
+        tree = ET.parse(gpxfile)
+        track =  tree.findall("{http://www.topografix.com/GPX/1/1}trk")
+        print(track)
